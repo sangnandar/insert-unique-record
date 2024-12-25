@@ -23,7 +23,7 @@ functions.http('insertRecord', async (req, res) => {
 
   // auth validation
   if (req.headers['api-key'] !== process.env.API_KEY) {
-    res.status(403).json({ status: 403, message: 'Forbidden.' });
+    res.status(403).json({ status: 403, message: 'Forbidden' });
     return;
   }
 
@@ -42,13 +42,32 @@ functions.http('insertRecord', async (req, res) => {
       utm_source,
       utm_medium,
       utm_campaign
-    ) values (
-      @ts,
-      date(@ts),
-      @email,
-      @utm_source,
-      @utm_medium,
-      @utm_campaign
+    )
+    with x as (
+    select
+      timestamp(@ts) ts,
+      date(@ts) date,
+      @email email,
+      @utm_source utm_source,
+      @utm_medium utm_medium,
+      @utm_campaign utm_campaign
+    )
+    select
+      ts,
+      date,
+      email,
+      utm_source,
+      utm_medium,
+      utm_campaign
+    from x 
+    where not exists (
+        select 1 from ${table} 
+        where 
+          date = x.date and
+          email = x.email and
+          utm_source = x.utm_source and
+          utm_medium = x.utm_medium and
+          utm_campaign = x.utm_campaign
     )`;
 
   const options = {
@@ -64,9 +83,9 @@ functions.http('insertRecord', async (req, res) => {
 
   try {
     await bigquery.query(options);
-    res.status(200).json({ status: 200, message: 'Data inserted successfully.' });
+    res.status(200).json({ status: 200, message: 'Success' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ status: 500, message: `Error inserting BigQuery: ${err}` });
+    res.status(500).json({ status: 500, message: err });
   }
 });
