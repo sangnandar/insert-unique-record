@@ -27,6 +27,8 @@ functions.http('insertRecord', async (req, res) => {
     return;
   }
 
+  
+
   /**
    * To run campaigns on specific country, it's a good idea to 
    * offset the timestamp to the timezone of the country.
