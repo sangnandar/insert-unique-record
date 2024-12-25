@@ -41,16 +41,24 @@ functions.http('insertRecord', async (req, res) => {
       email,
       utm_source,
       utm_medium,
-      utm_campaign
+      utm_campaign,
+      hash
     )
     with x as (
     select
-      timestamp(@ts) ts,
-      date(@ts) date,
-      @email email,
-      @utm_source utm_source,
-      @utm_medium utm_medium,
-      @utm_campaign utm_campaign
+      timestamp(@ts) as ts,
+      date(@ts) as date,
+      @email as email,
+      @utm_source as utm_source,
+      @utm_medium as utm_medium,
+      @utm_campaign as utm_campaign,
+      sha256(concat(
+        cast(date(@ts) as string), 
+        cast(@email as string), 
+        cast(@utm_source as string), 
+        cast(@utm_medium as string), 
+        cast(@utm_campaign as string))
+      ) as hash
     )
     select
       ts,
@@ -58,17 +66,14 @@ functions.http('insertRecord', async (req, res) => {
       email,
       utm_source,
       utm_medium,
-      utm_campaign
+      utm_campaign,
+      hash
     from x 
-    where not exists (
-        select 1 from ${table} 
-        where 
-          date = x.date and
-          email = x.email and
-          utm_source = x.utm_source and
-          utm_medium = x.utm_medium and
-          utm_campaign = x.utm_campaign
-    )`;
+    where
+      not exists (
+        select 1 from ${table} where hash = x.hash
+      )
+  `;
 
   const options = {
     query: query,
