@@ -27,8 +27,6 @@ functions.http('insertRecord', async (req, res) => {
     return;
   }
 
-  
-
   /**
    * To run campaigns on specific country, it's a good idea to 
    * offset the timestamp to the timezone of the country.
@@ -44,7 +42,7 @@ functions.http('insertRecord', async (req, res) => {
       utm_source,
       utm_medium,
       utm_campaign,
-      hash
+      hashed
     )
     with x as (
     select
@@ -60,7 +58,7 @@ functions.http('insertRecord', async (req, res) => {
         cast(@utm_source as string), 
         cast(@utm_medium as string), 
         cast(@utm_campaign as string))
-      ) as hash
+      ) as hashed
     )
     select
       ts,
@@ -69,11 +67,11 @@ functions.http('insertRecord', async (req, res) => {
       utm_source,
       utm_medium,
       utm_campaign,
-      hash
+      hashed
     from x 
     where
       not exists (
-        select 1 from ${table} where hash = x.hash
+        select 1 from ${table} where hashed = x.hashed
       )
   `;
 
@@ -93,6 +91,6 @@ functions.http('insertRecord', async (req, res) => {
     res.status(200).json({ status: 200, message: 'Success' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ status: 500, message: err });
+    res.status(500).json({ status: 500, message: err.message });
   }
 });
