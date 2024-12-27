@@ -37,3 +37,6 @@ Payload
  "utm_campaign": "brand"
 }
 ```
+
+# See also
+- [insert-unique-record2](https://github.com/sangnandar/insert-unique-record2) same use case but using Apps Script instead of Cloud Functions.
