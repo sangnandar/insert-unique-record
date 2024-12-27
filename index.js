@@ -10,7 +10,7 @@ const functions = require('@google-cloud/functions-framework');
  * @param {Object} res 
  * 
  * @example
- * GET /inserRecord?email=john.smith@email.com&utm_source=google&utm_medium=cpc&utm_campaign=brand
+ * GET /insertRecord?email=john.smith@email.com&utm_source=google&utm_medium=cpc&utm_campaign=brand
  * POST /insertRecord
  * {
  *  "email": "john.smith@email.com",

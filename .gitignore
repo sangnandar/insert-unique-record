@@ -1,5 +1,5 @@
 **/**
-!.gitignore
-!*.js
-!*.html
+!README.md
+!LICENSE
 !package.json
+!*.js
