@@ -6,9 +6,8 @@ This is Cloud Functions script to insert only unique records into BigQuery. This
 The script inserts only unique `date`+`email`+`utm_source`+`utm_medium`+`utm_campaign`.
 
 # BigQuery configuration
-Table structure
-
-[image]
+<div align="center"><img src="https://github.com/user-attachments/assets/ba9a0bd1-0b74-42ac-9aeb-2520a1c6ecd4" /></div>
+<div align="center">Table structure</div>
 
 # Cloud Functions configuration
 - Runtime: Node.js
@@ -25,7 +24,7 @@ One of the advantages of using Cloud Functions is that we can add API key authen
   'Content-Type': 'application/json'
 }
 ```
-`GET` /insertRecord?email=john.smith@email.com&utm_source=google&utm_medium=cpc&utm_campaign=brand
+`GET` /insertRecord?email=john.smith<span>@</span>email.com&utm_source=google&utm_medium=cpc&utm_campaign=brand
 
 `POST` /insertRecord
 
